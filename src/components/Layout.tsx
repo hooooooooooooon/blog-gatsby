@@ -1,5 +1,5 @@
 import { Link } from "gatsby";
-import React from "react";
+import React, { useState } from "react";
 
 interface ILayoutProps {
   children: any;
@@ -7,9 +7,14 @@ interface ILayoutProps {
 }
 
 export default function Layout({ children, title }: ILayoutProps) {
+  const [isOpen, setIsOpen] = useState(false);
+
+  const toggleMenu = () => {
+    setIsOpen(!isOpen);
+  };
   return (
-    <div>
-      <nav className="bg-gray-800 p-4">
+    <div className="h-screen flex flex-col">
+      <nav className="bg-gray-800 p-4 w-full top-0 z-10">
         <div className="container mx-auto flex justify-between items-center">
           <div className="text-white text-2xl font-bold">
             <Link to="/">My Portfolio</Link>
@@ -29,7 +34,10 @@ export default function Layout({ children, title }: ILayoutProps) {
             </Link>
           </div>
           <div className="md:hidden">
-            <button className="text-gray-300 hover:text-white">
+            <button
+              onClick={toggleMenu}
+              className="text-gray-300 hover:text-white"
+            >
               <svg
                 className="w-6 h-6"
                 fill="none"
@@ -47,9 +55,16 @@ export default function Layout({ children, title }: ILayoutProps) {
             </button>
           </div>
         </div>
+        {isOpen && (
+          <div className="md:hidden">
+            <Link to="/" className="block px-4 py-2 text-gray-300 hover:bg-gray-700">Home</Link>
+            <Link to="/about" className="block px-4 py-2 text-gray-300 hover:bg-gray-700">About</Link>
+            <Link to="/projects" className="block px-4 py-2 text-gray-300 hover:bg-gray-700">Projects</Link>
+            <Link to="/contact" className="block px-4 py-2 text-gray-300 hover:bg-gray-700">Contact</Link>
+          </div>
+        )}
       </nav>
-      <main>
-        <h1>{title}</h1>
+      <main className="flex-grow overflow-y-auto custom-scrollbar">
         {children}
       </main>
     </div>
